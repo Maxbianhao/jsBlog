@@ -14,8 +14,9 @@
   ],
   "author": "bianhao",
   "dependencies": {
-    "express": "^4.16.2",
-    "express-session": "^1.15.6",
+    "koa": "^2.4.1",
+    "koa-router": "^7.3.0",
+    "koa-session": "^5.5.1",
     "mongoose": "^4.13.6",
     "mongoose-schema-extend": "^0.2.2"
   },

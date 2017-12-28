@@ -2,7 +2,7 @@
  * @Author: bianhao 
  * @Date: 2017-12-06 16:54:36 
  * @Last Modified by: bianhao
- * @Last Modified time: 2017-12-12 19:05:57
+ * @Last Modified time: 2017-12-28 14:20:51
  */
 var adminsModel = require('../models/admins').adminsModel;
 var db = require('../db'),
@@ -11,107 +11,112 @@ var db = require('../db'),
 /**
  * 创建admin
  * 
- * @param {any} params admin属性
- * @param {any} callback 回调
+ * @param {Object} params admin属性
  */
-exports.createAdmin = (params, callback) => {
+exports.createAdmin = (params) => {
   let admin = new adminsModel({
     _id: mongoose.Types.ObjectId(),
     createTime: new Date(),
     account: params.account,
     password: params.password,
     power: params.power
-  });
-  // 查重
-  adminsModel.findOne({
-    'account': params.account
-  }, (err, doc) => {
-    if(err) {
-      return callback(err);
-    } else if(doc) {
-      // 用户名已存在 
-      return callback({'code': -1})
-    } else {
-      admin.save(err => {
-        if(err) {
-          return callback(err);
-        }
-        // 创建成功
-        return callback({code: 1});
-      })
-    }
+  })
+  return new Promise((resolve, reject) => {
+    admin.save(err => {
+      if(err) reject(err);
+      // 创建成功
+      resolve({'code': 1})
+    });
+  })
+}
+/**
+ * 通过账号查询admin
+ * 
+ * @param {Object} params admin：账号
+ */
+exports.findAdminByAccount = params => {
+  return new Promise((resolve, reject) => {
+    adminsModel.findOne({
+      'account': params.account
+    }, (err, doc) => {
+      if(err) {
+        reject(err);
+      } else if(doc) {
+        // 查询成功
+        resolve({'code': 1, 'admin': doc});
+      } else {
+        // 查询结果为空
+        resolve({'code': -1});
+      }
+    })
+  })
+}
+/**
+ * 通过id查询admin
+ * 
+ * @param {Object} params id：admin id
+ */
+exports.findAdminById = params => {
+  return new Promise((resolve, reject) => {
+    adminsModel.findById({_id: params.id}, (err, doc) => {
+      if(err) reject(err);
+      resolve(doc);
+    })
   })
 }
 /**
  * 查询admins列表
  * 
- * @param {any} params 查询参数
- * @param {any} callback 回调
+ * @param {Object} params 查询参数
  */
-exports.findAdmins = (params, callback) => {
-  if('function' == typeof params) {
-    callback = params;
-    params = {};
-  }
-  adminsModel.find(params,{},{},(err, docs) => {
-    if(err) {
-      return callback(err);
-    }
-    return callback(docs);
+exports.findAdmins = params => {
+  params = params || {};
+  return new Promise((resolve, reject) => {
+    adminsModel.find(params,{},{},(err, docs) => {
+      if(err) reject(err);
+      resolve(docs);
+    })
   })
 }
 /**
  * 删除admin
  * 
- * @param {Object} params _id：删除admin的id，nowAdminId：当前用户id
- * @param {any} callback 
+ * @param {Object} params _id：删除admin的id
  */
-exports.delAdmin = (params, callback) => {
-  let _id = params._id,
-    nowAdminId = params.nowAdminId;
-  // 先查询要删除admin的权限，高于当前用户不能删除
-  adminsModel.findById({_id: _id}, (err, doc) => {
-    if(err) {
-      return callback(err);
-    } else if(!doc) {
-      // 管理员_id不存在
-      return callback({'code': -1});
-    }
-    // 权限不足
-    if(params.nowAdminId >= doc.power) {
-      return callback({'code': -2})
-    }
+exports.delAdmin = (params) => {
+  let _id = params._id;
+  return new Promise((resolve, reject) => {
     adminsModel.remove({_id: _id}, (err, doc) => {
-      if(err) {
-        return callback(err);
-      }
+      if(err) reject(err);
       // 删除成功
-      return callback({'code': 1});
+      resolve({'code': 1});
     })
   })
 }
 /**
  * admin登录
  * 
- * @param {any} params 用户名，密码
- * @param {any} callback 
+ * @param {Object} params 用户名，密码
  */
-exports.adminLogin = (params, callback) => {
+exports.adminLogin = (params) => {
   let account = params.account,
     password = params.password;
-  adminsModel.findOne({account: account}, (err, doc) => {
-    if(err) {
-      return callback(err);
-    } else if(!doc) {
-      // 账号不存在
-      return callback({'code': -2});
-    } else {
-      // 密码不正确 
-      if(password !== doc.password) {
-        return callback({'code': -1});
+
+  return new Promise((resolve, reject) => {
+    adminsModel.findOne({account: account}, (err, doc) => {
+      if(err) {
+        reject(err);
+      } else if(!doc) {
+        // 账号不存在
+        resolve({'code': -2});
+      } else {
+        // 密码不正确 
+        if(password !== doc.password) {
+          resolve({'code': -1});
+        }
+        // 验证通过
+        resolve({'code': 1, 'admin': doc});
       }
-      // 验证通过
-      return callback({'code': 1}, doc);
-    }
-  })
+    })
+  });
 }
