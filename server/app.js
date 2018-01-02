@@ -2,12 +2,12 @@
  * @Author: bianhao 
  * @Date: 2017-12-12 11:44:32 
  * @Last Modified by: bianhao
- * @Last Modified time: 2017-12-28 15:06:02
+ * @Last Modified time: 2018-01-02 18:26:56
  */
 const Koa = require('Koa'),
   app = new Koa(),
   session = require('koa-session'),
-  adminsApiRouter = require('./api/admins').adminsApi;
+  adminApiRouter = require('./api/admin').adminApi;
 
 // session config
 const sessionConfig = {
@@ -36,7 +36,7 @@ app.use((ctx, next) => {
   }
 })
 
-// admins接口初始化
-app.use(adminsApiRouter.routes());
+// admin接口初始化
+app.use(adminApiRouter.routes());
   
 app.listen('3000');

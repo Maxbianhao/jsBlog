@@ -2,13 +2,13 @@
  * @Author: bianhao 
  * @Date: 2017-12-12 11:36:25 
  * @Last Modified by: bianhao
- * @Last Modified time: 2017-12-28 14:21:53
+ * @Last Modified time: 2018-01-02 18:26:43
  */
 const Router = require('koa-router'),
-  admins = require('../controllers/admins');
+  admin = require('../controllers/admin');
 
 const router = new Router({
-  prefix: '/admins'
+  prefix: '/admin'
 });
 
 // 创建admin
@@ -18,10 +18,10 @@ router.get('/createAdmin', async (ctx, next) => {
     power = ctx.query.power;
   
   // 查询用户名是否重复
-  let admin = await admins.findAdminByAccount({account: ctx.query.account});
+  let admin = await admin.findAdminByAccount({account: ctx.query.account});
   // 当前用户名不存在可以创建
   if(admin.code === -1) {
-    let createAdmin = await admins.createAdmin({
+    let createAdmin = await admin.createAdmin({
       'account': account,
       'password': password,
       'power': power
@@ -34,21 +34,21 @@ router.get('/createAdmin', async (ctx, next) => {
 });
 
 // 返回所有的admin列表
-router.get('/adminsList', async (ctx, next) => {
-  let adminsList = await admins.findAdmins();
-  ctx.body = adminsList;
+router.get('/adminList', async (ctx, next) => {
+  let adminList = await admin.findAdmin();
+  ctx.body = adminList;
 });
 
 // 删除指定admin
 router.get('/delAdmin', async (ctx, next) => {
   let _id = ctx.query._id;
   // 判断当前登录admin的权限
-  let nowAdmin = await admins.findAdminById({id: ctx.session.admin._id});
+  let nowAdmin = await admin.findAdminById({id: ctx.session.admin._id});
   if(nowAdmin.power !== 1) {
     // 权限不足
     ctx.body = {'code': -1};
   } else {
-    let removeDrag = await admins.delAdmin({_id: _id});
+    let removeDrag = await admin.delAdmin({_id: _id});
     ctx.body = removeDrag;
   }
 });
@@ -58,7 +58,7 @@ router.get('/adminLogin', async (ctx, next) => {
   let account = ctx.query.account,
     password = ctx.query.password;
 
-  let loginRes = await admins.adminLogin({
+  let loginRes = await admin.adminLogin({
     account: account,
     password: password
   });
@@ -76,4 +76,4 @@ router.get('/adminLogout', (ctx, next) => {
   ctx.redirect('/');
 })
 
-exports.adminsApi = router;
+exports.adminApi = router;

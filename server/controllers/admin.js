@@ -2,9 +2,9 @@
  * @Author: bianhao 
  * @Date: 2017-12-06 16:54:36 
  * @Last Modified by: bianhao
- * @Last Modified time: 2017-12-28 14:20:51
+ * @Last Modified time: 2018-01-02 18:27:34
  */
-var adminsModel = require('../models/admins').adminsModel;
+var adminModel = require('../models/admin').adminModel;
 var db = require('../db'),
   mongoose = db.mongoose;
 
@@ -14,7 +14,7 @@ var db = require('../db'),
  * @param {Object} params admin属性
  */
 exports.createAdmin = (params) => {
-  let admin = new adminsModel({
+  let admin = new adminModel({
     _id: mongoose.Types.ObjectId(),
     createTime: new Date(),
     account: params.account,
@@ -36,7 +36,7 @@ exports.createAdmin = (params) => {
  */
 exports.findAdminByAccount = params => {
   return new Promise((resolve, reject) => {
-    adminsModel.findOne({
+    adminModel.findOne({
       'account': params.account
     }, (err, doc) => {
       if(err) {
@@ -58,21 +58,21 @@ exports.findAdminByAccount = params => {
  */
 exports.findAdminById = params => {
   return new Promise((resolve, reject) => {
-    adminsModel.findById({_id: params.id}, (err, doc) => {
+    adminModel.findById({_id: params.id}, (err, doc) => {
       if(err) reject(err);
       resolve(doc);
     })
   })
 }
 /**
- * 查询admins列表
+ * 查询admin列表
  * 
  * @param {Object} params 查询参数
  */
-exports.findAdmins = params => {
+exports.findAdmin = params => {
   params = params || {};
   return new Promise((resolve, reject) => {
-    adminsModel.find(params,{},{},(err, docs) => {
+    adminModel.find(params,{},{},(err, docs) => {
       if(err) reject(err);
       resolve(docs);
     })
@@ -86,7 +86,7 @@ exports.findAdmins = params => {
 exports.delAdmin = (params) => {
   let _id = params._id;
   return new Promise((resolve, reject) => {
-    adminsModel.remove({_id: _id}, (err, doc) => {
+    adminModel.remove({_id: _id}, (err, doc) => {
       if(err) reject(err);
       // 删除成功
       resolve({'code': 1});
@@ -103,7 +103,7 @@ exports.adminLogin = (params) => {
     password = params.password;
 
   return new Promise((resolve, reject) => {
-    adminsModel.findOne({account: account}, (err, doc) => {
+    adminModel.findOne({account: account}, (err, doc) => {
       if(err) {
         reject(err);
       } else if(!doc) {

@@ -2,14 +2,14 @@
  * @Author: bianhao 
  * @Date: 2017-12-06 16:38:41 
  * @Last Modified by: bianhao
- * @Last Modified time: 2017-12-12 17:58:06
+ * @Last Modified time: 2018-01-02 18:25:37
  */
 
-var db = require('../db'),
+const db = require('../db'),
   mongoose = db.mongoose,
   Schema = mongoose.Schema;
 
-var adminsSchema = new mongoose.Schema({
+const adminSchema = new Schema({
   // 主键
   _id: Schema.Types.ObjectId,
   // 创建时间
@@ -26,4 +26,4 @@ var adminsSchema = new mongoose.Schema({
   bandrag: {type: Boolean, default: false}
 });
 
-exports.adminsModel = mongoose.model('admins', adminsSchema);
+exports.adminModel = mongoose.model('admin', adminSchema);
