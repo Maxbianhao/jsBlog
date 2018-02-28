@@ -1,12 +1,17 @@
 {
-  "name": "nodeblog-server",
+  "name": "jsblog-server",
   "version": "0.0.1",
   "description": "node搭建的博客系统-api服务器",
   "main": "index.js",
   "scripts": {
-    "jsbloginit": "yarn || npm install",
+    "serverinit": "yarn || npm install",
     "start": "node app.js"
   },
+  "repository": "git+https://github.com/binnull/jsBlog.git",
+  "bugs": {
+    "url": "https://github.com/binnull/jsBlog/issues"
+  },
+  "homepage": "https://github.com/binnull/jsBlog#readme",
   "keywords": [
     "nodejs",
     "node",
