@@ -28,7 +28,7 @@
     "webpack-merge": "^4.1.1"
   },
   "dependencies": {
-    "lantern-ui": "^0.9.21",
+    "lantern-ui": "^0.9.22",
     "vue": "^2.5.13",
     "vue-router": "^3.0.1"
   }

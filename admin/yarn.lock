@@ -2883,9 +2883,9 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.2.tgz#01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
 
-lantern-ui@^0.9.21:
-  version "0.9.21"
-  resolved "https://registry.yarnpkg.com/lantern-ui/-/lantern-ui-0.9.21.tgz#6d29b1bfb1f3eb03eb29b0298af98aef06376c27"
+lantern-ui@^0.9.22:
+  version "0.9.22"
+  resolved "https://registry.yarnpkg.com/lantern-ui/-/lantern-ui-0.9.22.tgz#e014667cce0883bff923eec2d954a2a9da565558"
   dependencies:
     vue "^2.5.13"
 
